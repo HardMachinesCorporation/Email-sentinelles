@@ -1,9 +1,11 @@
 // Configuration TypeORM
 import { DataSource, DataSourceOptions } from 'typeorm';
-import { BadRequestException, Logger } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestJsTypeOrmLogger } from '../logger/typeorm.logger';
 import * as dotenv from 'dotenv';
+import { guaranteeErrorFormat } from '../../../common/utils/guarantee-error.format';
+import { sharedErrorHandleErrors } from '../../../common/utils/shared-error.handler';
 dotenv.config();
 
 const configService = new ConfigService();
@@ -12,12 +14,10 @@ let databaseUrl: string;
 try {
   databaseUrl = configService.getOrThrow<string>('DATABASE_URL');
 } catch (error) {
-  console.error(error.message);
-  throw new BadRequestException({
-    statusCode: 400,
-    error: 'Bad Configuration',
-    message: 'Database URL is missing',
-  });
+  const loggedMessage = guaranteeErrorFormat(error)
+    ? error.message || 'Failed to load database url'
+    : 'An unknown error occurred';
+  sharedErrorHandleErrors(error, loggedMessage, 'Bad Configuration');
 }
 
 export const DatabaseConfiguration = (

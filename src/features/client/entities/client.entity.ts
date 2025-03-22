@@ -10,16 +10,16 @@ import {
 @Entity('Client')
 export class Client {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
   @Index()
   @Column({ unique: true, nullable: true })
-  email: string;
+  email!: string;
   @Column()
-  password: string;
+  password!: string;
   @Column()
-  name: string;
+  name!: string;
   @VersionColumn()
-  version: number;
+  version!: number;
   @DeleteDateColumn({ nullable: true }) // S'assure que deletedAt peut être NULL en DB
-  deletedAt: Date | null;
+  deletedAt!: Date | null;
 }

@@ -7,6 +7,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsWhere, Repository } from 'typeorm';
 import { AbstractBaseProvider } from '../../common/abstract/abstract.base';
 import { IPagination } from '../../common/abstract/types/result-with.pagination';
+import { guaranteeErrorFormat } from '../../common/utils/guarantee-error.format';
+import { sharedErrorHandleErrors } from '../../common/utils/shared-error.handler';
 
 @Injectable()
 export class ClientService extends AbstractCrudProvider<Client> {
@@ -23,7 +25,15 @@ export class ClientService extends AbstractCrudProvider<Client> {
     try {
       return this.findAll(pagination);
     } catch (error) {
-      throw Error(error.stack);
+      const logMessage = guaranteeErrorFormat(error)
+        ? error.stack || 'Database error'
+        : 'An unknown error occurred';
+
+      const message = guaranteeErrorFormat(error)
+        ? error.message || 'Failed to fetch users'
+        : 'An unknown error occurred while fetching users';
+
+      sharedErrorHandleErrors(error, logMessage, message);
     }
   }
 }
