@@ -30,10 +30,13 @@ export class ClientService extends AbstractCrudProvider<Client> {
       throw new BadRequestException('Client not provided or invalid');
 
     const findPossibleConflictInDd = await this.findByEmail(client.email);
-    if (findPossibleConflictInDd)
+    if (findPossibleConflictInDd) {
+      console.warn(`🚨 Conflict detected: ${client.email} already exists.`);
       throw new ConflictException(
         'Conflicts: The user you re trying to create already exist',
       );
+    }
+
     try {
       const hashClientPassword = await this.passwordService.securePassword(
         client.password,
