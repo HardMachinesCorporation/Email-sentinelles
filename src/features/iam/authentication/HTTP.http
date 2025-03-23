@@ -1,0 +1,19 @@
+### sign-in
+POST http://localhost:3000/authentication/sign-in
+Content-Type: application/json
+
+{
+  "email": "ines@gmail.com",
+  "password": "JustForTesting845"
+}
+
+
+### sign-up
+POST http://localhost:3000/authentication/sign-up
+Content-Type: application/json
+
+{
+  "email": "ines@gmail.com",
+  "password": "NoContent1235",
+  "name1": "Ines Makaya"
+}

@@ -1,10 +1,3 @@
-import { IsEmail, IsString, MinLength } from 'class-validator';
+import { CreateClientDto } from '../../../client/dto/create-client.dto';
 
-export class SignUpDto {
-  @IsEmail()
-  readonly email!: string;
-  @MinLength(10)
-  readonly password!: string;
-  @IsString()
-  readonly name!: string;
-}
+export class SignUpDto extends CreateClientDto {}
