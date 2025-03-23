@@ -1,10 +1,13 @@
-import { ConfigService } from '@nestjs/config';
 import { bcryptSchema } from './bcrypt.schema';
-import { z } from 'zod';
-
+import { ConfigService } from '@nestjs/config';
+import dotenv from 'dotenv';
+dotenv.config();
+// ✅ On récupère les valeurs d'environnement UNE SEULE FOIS
 const configService = new ConfigService();
-export type BcryptConfig = z.infer<typeof bcryptSchema>;
-
-export default () => ({
-  SALT_ROUNDS: configService.get<BcryptConfig>('SALT_ROUNDS'),
+const validatedConfig = bcryptSchema.parse({
+  SALT_ROUNDS: configService.get('SALT_ROUNDS'),
 });
+
+export type BcryptConfig = typeof validatedConfig;
+
+export default validatedConfig; // ✅ On retourne directement la config validée

@@ -10,10 +10,10 @@ import { AbstractBaseProvider } from './abstract.base';
 
 // Exemple d'entité simulée pour le test
 class MockEntity {
-  id: number;
+  id!: number;
   email?: string;
-  name: string;
-  createdAt: Date;
+  name!: string;
+  createdAt!: Date;
 }
 
 describe('AbstractBaseProvider', () => {

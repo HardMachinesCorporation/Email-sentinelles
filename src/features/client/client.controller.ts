@@ -21,7 +21,10 @@ export class ClientController {
 
   @Post()
   create(@Body() createUserDto: CreateClientDto) {
-    return this.userService.createEntity(createUserDto);
+    console.log(
+      `STEP-1 : Controller received request with object !${JSON.stringify(createUserDto)}`,
+    );
+    return this.userService.saveToDatabase(createUserDto);
   }
 
   @Get()

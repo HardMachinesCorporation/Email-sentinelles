@@ -1,0 +1,19 @@
+### Send POST request with json body
+POST http://localhost:3000/user
+Content-Type: application/json
+
+{
+  "name": 999,
+  "password": "content",
+   "email": "jordach.makaya@hotmail.com"
+}
+
+
+### Send POST request with json body
+PATCH http://localhost:3000/user/1
+Content-Type: application/json
+
+{
+  "name": "Jordach Makaya"
+
+}

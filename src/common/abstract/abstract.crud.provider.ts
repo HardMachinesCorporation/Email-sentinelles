@@ -31,7 +31,9 @@ export class AbstractCrudProvider<
     const repo: Repository<T> = manager
       ? manager.getRepository<T>(this.repository.target)
       : this.repository;
+    console.log('repo is of type ', typeof repo);
     const entity = repo.create(data);
+    console.log('entity created is ', JSON.stringify(entity, null, 2));
     try {
       return await repo.save<T>(entity);
     } catch (error) {

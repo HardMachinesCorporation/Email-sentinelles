@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
-import * as request from 'supertest';
+import request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import { ClientService } from '../../src/features/client/client.service';
 import { CreateClientDto } from '../../src/features/client/dto/create-client.dto';
@@ -9,32 +9,26 @@ import { UpdateClientDto } from '../../src/features/client/dto/update-client.dto
 describe('ClientController (e2e)', () => {
   let app: INestApplication;
   let clientService = {
-    createEntity: jest
-      .fn()
-      .mockResolvedValue({
-        id: 1,
-        email: 'test@example.com',
-        name: 'John Doe',
-      }),
+    createEntity: jest.fn().mockResolvedValue({
+      id: 1,
+      email: 'test@example.com',
+      name: 'John Doe',
+    }),
     getAllUsers: jest
       .fn()
       .mockResolvedValue([
         { id: 1, email: 'test@example.com', name: 'John Doe' },
       ]),
-    findOneById: jest
-      .fn()
-      .mockResolvedValue({
-        id: 1,
-        email: 'test@example.com',
-        name: 'John Doe',
-      }),
-    updateEntity: jest
-      .fn()
-      .mockResolvedValue({
-        id: 1,
-        email: 'test@example.com',
-        name: 'Jane Doe',
-      }),
+    findOneById: jest.fn().mockResolvedValue({
+      id: 1,
+      email: 'test@example.com',
+      name: 'John Doe',
+    }),
+    updateEntity: jest.fn().mockResolvedValue({
+      id: 1,
+      email: 'test@example.com',
+      name: 'Jane Doe',
+    }),
     deleteEntity: jest.fn().mockResolvedValue({ success: true }),
   };
 

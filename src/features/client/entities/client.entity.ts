@@ -6,9 +6,10 @@ import {
   PrimaryGeneratedColumn,
   VersionColumn,
 } from 'typeorm';
+import { IClient } from '../interface/client.interface';
 
 @Entity('Client')
-export class Client {
+export class Client implements IClient {
   @PrimaryGeneratedColumn()
   id!: number;
   @Index()

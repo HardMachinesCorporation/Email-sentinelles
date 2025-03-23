@@ -28,8 +28,8 @@ export const DatabaseConfiguration = (
     url: databaseUrl,
     entities:
       configService.getOrThrow<string>('NODE_ENV') === 'production'
-        ? ['dist/feature/client/*.entity.js']
-        : ['src/feature/client/*.entity.ts'], // Utilisation des fichiers compilés
+        ? ['dist/features/client/entities/*.entity.js']
+        : ['src/features/client/entities/*.entity.ts'], // Utilisation des fichiers compilés
     migrations:
       configService.getOrThrow<string>('NODE_ENV') === 'production'
         ? ['dist/infra/database/migrations/*.js']
