@@ -16,6 +16,9 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
 
+    // 🔥 Log l'erreur complète pour debugging
+    console.error('Exception interceptée :', exception);
+
     // 🔥 Handle BadRequestException (ValidationPipe Errors)
     if (exception instanceof BadRequestException) {
       return response.status(400).json({
