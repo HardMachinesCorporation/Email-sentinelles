@@ -1,11 +1,18 @@
+### GET request with a header
+GET http://localhost:3000/user/12
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsImVtYWlsIjoibGV3aXNAZ21haWwuY29tIiwiaWF0IjoxNzQyOTI4MjI5LCJleHAiOjE3NDI5MzEyMjksImF1ZCI6ImxvY2Fob3N0OjMwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.sKbdRkGviCBE8yhMCBHZPHEjuKc4hSJq8s-rGc11ebY
+
+
 ### Send POST request with json body
 POST http://localhost:3000/user
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsImVtYWlsIjoiaW5lc0BnbWFpbC5jb20iLCJpYXQiOjE3NDI4NTMxOTEsImV4cCI6MTc0Mjg1NjE5MSwiYXVkIjoibG9jYWhvc3Q6MzAwIiwiaXNzIjoibG9jYWxob3N0OjMwMDAifQ.Ttq9y9iFopa8B1SRqm1QIYKBd6qAB8YEPlKXjWBHJaY
 
 {
-  "name": 999,
-  "password": "content",
-   "email": "jordach.makaya@hotmail.com"
+  "name": "Lewis Batchi",
+  "password": "1254858content",
+   "email": "Lewis@hotmail.com"
 }
 
 

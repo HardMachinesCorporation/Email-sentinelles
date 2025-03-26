@@ -10,7 +10,11 @@ import { AuthenticationService } from './authentication.service';
 import { SignUpDto } from './dto/sign-up.dto';
 import { SignInDto } from './dto/sign-in.dto';
 import { Response } from 'express';
+import { Auth } from './decorators/auth.decorator';
+import { AuthType } from './enums/auth-type.enum.ts';
+import { RefreshTokenDTO } from './dto/refresh-token.dto';
 
+@Auth(AuthType.None)
 @Controller('authentication')
 export class AuthenticationController {
   constructor(private readonly authenticationService: AuthenticationService) {}
@@ -20,10 +24,15 @@ export class AuthenticationController {
     return this.authenticationService.signup(signUpDto);
   }
 
+  @HttpCode(HttpStatus.OK)
+  @Post('refresh-token')
+  async refreshToken(@Body() refreshToken: RefreshTokenDTO) {
+    return this.authenticationService.refreshToken(refreshToken);
+  }
   // si success 200 au lieu du default 200 de nestjs
   @HttpCode(HttpStatus.OK)
-  @Post('sign-in')
-  async signIn(
+  @Post('login-cookies')
+  async login(
     @Res({ passthrough: true }) response: Response,
     @Body() signInDto: SignInDto,
   ) {
@@ -33,5 +42,12 @@ export class AuthenticationController {
       httpOnly: true,
       sameSite: true,
     });
+  }
+
+  // si success 200 au lieu du default 200 de nestjs
+  @HttpCode(HttpStatus.OK)
+  @Post('sign-in')
+  async signIn(@Body() signInDto: SignInDto) {
+    return await this.authenticationService.signIn(signInDto);
   }
 }

@@ -8,12 +8,17 @@ import {
   Delete,
   Query,
   ParseIntPipe,
+  Req,
 } from '@nestjs/common';
 import { ClientService } from './client.service';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
-import { FindOptionsWhere } from 'typeorm';
+import { FindOptions, FindOptionsWhere } from 'typeorm';
 import { Client } from './entities/client.entity';
+import { Auth } from '../iam/authentication/decorators/auth.decorator';
+import { AuthType } from '../iam/authentication/enums/auth-type.enum.ts';
+import { ActiveUser } from '../iam/decorators/active.user.decorators';
+import { IActiveUser } from '../iam/interfaces/active-user-data.interface';
 
 @Controller('user')
 export class ClientController {
@@ -27,7 +32,7 @@ export class ClientController {
     return this.userService.saveToDatabase(createUserDto);
   }
 
-  @Get()
+  @Get('users')
   getAllUser(
     @Query('limit', ParseIntPipe) limit: number,
     @Query('page', ParseIntPipe) page: number,
@@ -42,8 +47,13 @@ export class ClientController {
   }
 
   @Get(':id')
-  findEntityById(@Param('id', ParseIntPipe) id: number) {
-    return this.userService.findOneById(id);
+  findEntityById(
+    @Param('id', ParseIntPipe) id: number,
+    @ActiveUser() user: IActiveUser,
+  ) {
+    console.log(`Incomming request with ${id} type of ${typeof id}`, user);
+    // return this.userService.findOneById(id);
+    return 'success find';
   }
 
   @Patch(':id')

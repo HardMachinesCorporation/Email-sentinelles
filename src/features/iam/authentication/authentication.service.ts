@@ -1,4 +1,5 @@
 import {
+  Body,
   Inject,
   Injectable,
   InternalServerErrorException,
@@ -14,6 +15,8 @@ import { JwtService } from '@nestjs/jwt';
 import jwtConfig from '../config/jwt.config';
 import JwtConfig from '../config/jwt.config';
 import { ConfigType } from '@nestjs/config';
+import { IActiveUser } from '../interfaces/active-user-data.interface';
+import { RefreshTokenDTO } from './dto/refresh-token.dto';
 
 @Injectable()
 export class AuthenticationService {
@@ -63,29 +66,61 @@ export class AuthenticationService {
       console.warn(`Mot de passe invalide pour l'email: ${customer.email}`);
       throw new UnauthorizedException("Passwords or Email don't match.");
     }
-    const payload = {
-      sub: getKnownClient.id,
-      email: getKnownClient.email,
-    };
-    const tokenConfig = {
-      audience: this.jwtConfig.audience,
-      issuer: this.jwtConfig.issuer,
-      secret: this.jwtConfig.secret,
-      expiresIn: this.jwtConfig.accessTokenTtl,
-    };
-    // TODO we fille fill this gap later
-    const accessToken: string = await this.jwtService.signAsync(
-      payload,
-      tokenConfig,
+    return await this.reGenerateTokens(getKnownClient);
+  }
+
+  public async reGenerateTokens(getKnownClient: Client) {
+    const [accessToken, refreshToken] = await Promise.all([
+      this.generateToken<Partial<IActiveUser>>(
+        getKnownClient.id,
+        this.jwtConfig.accessTokenTtl,
+        { email: getKnownClient.email },
+      ),
+      this.generateToken(getKnownClient.id, this.jwtConfig.refreshTokenTtl),
+    ]);
+    return { accessToken, refreshToken };
+  }
+
+  async refreshToken(refreshToken: RefreshTokenDTO) {
+    const { sub } = await this.jwtService.verifyAsync<Pick<IActiveUser, 'sub'>>(
+      refreshToken.refreshToken,
+      {
+        secret: this.jwtConfig.secret,
+        audience: this.jwtConfig.audience,
+        issuer: this.jwtConfig.issuer,
+      },
     );
-    if (!accessToken) {
-      throw new InternalServerErrorException(
-        'Something went wrong No credentials validated, please try again. .',
+    if (!sub) {
+      throw new UnauthorizedException(
+        'Your credentials are not well configured.',
       );
     }
+    const client = await this.clientService.findOneByIdOrEmail(sub);
+    if (!client) {
+      throw new UnauthorizedException(
+        "You don't enough right to have access to this service.",
+      );
+    }
+    return this.reGenerateTokens(client);
+  }
 
-    return {
-      accessToken,
-    };
+  private async generateToken<T>(
+    userId: number,
+    expiresIn: number,
+    payload?: T,
+  ) {
+    // TODO we fille fill this gap later
+    return await this.jwtService.signAsync(
+      {
+        userId,
+        ...payload,
+      },
+      {
+        audience: this.jwtConfig.audience,
+        issuer: this.jwtConfig.issuer,
+        secret: this.jwtConfig.secret,
+        expiresIn,
+      },
+    );
   }
 }

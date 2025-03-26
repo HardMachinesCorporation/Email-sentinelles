@@ -3,17 +3,21 @@ POST http://localhost:3000/authentication/sign-in
 Content-Type: application/json
 
 {
-  "email": "ines@gmail.com",
+  "email": "lewis@gmail.com",
   "password": "NoContent1235"
 }
 
+### RefreshToken
+POST http://localhost:3000/authentication/refresh-token
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsImlhdCI6MTc0Mjk2MTEwNiwiZXhwIjoxNzQzMDQ3NTA2LCJhdWQiOiJsb2NhaG9zdDozMDAiLCJpc3MiOiJsb2NhbGhvc3Q6MzAwMCJ9.wmZhNMvLjijfFu_KkETmDA0Pk02uSILUBG78Opuib1s
 
 ### sign-up
 POST http://localhost:3000/authentication/sign-up
 Content-Type: application/json
 
 {
-  "email": "ines@gmail.com",
+  "email": "lewis@gmail.com",
   "password": "NoContent1235",
-  "name1": "Ines Makaya"
+  "name": "Lewis Batch"
 }
